@@ -22,7 +22,7 @@ function App() {
   }
 
   const userCards = userDatas.map((userData,idx) => {
-    return <Card sx={{ maxWidth: 345 }}>
+    return <Card key = {idx} sx={{ maxWidth: 345 }}>
     <CardActionArea>
       <CardMedia
         component="img"
