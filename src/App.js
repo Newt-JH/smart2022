@@ -1,35 +1,56 @@
-import faker from '@faker-js/faker'; // 영문 버전
-import faker_ko from '@faker-js/faker/locale/ko'; // 한글 버전
-import UserCard from './components/UserCard';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Switch from '@mui/material/Switch';
+import Box from '@mui/material/Box';
+import { useEffect, useState } from 'react';
+import { makeUserDatas } from './Utils';
+import UserCardList from './components/UserCardList';
 
-const userDatas= [];
-
-while(userDatas.length < 10) {
-  userDatas.push({
-    avatar: faker.image.avatar(),
-    name: `${faker_ko.name.lastName()}${faker_ko.name.firstName()}`,
-    email: faker.internet.email(),
-    jobTitle: faker.name.jobTitle(),
-    phoneNumber: faker.phone.phoneNumber(),
-  
-  })
-}
+const userDatas = makeUserDatas(1004);
 
 function App() {
-  const userCards = userDatas.map((userData, idx) => {
-    return <UserCard key={idx} userData={userData} idx={idx} />;
-  })
-  
+  const [useDarkMode, setUseDarkMode] = useState(true);
+
+  const handleChange = (event) => {
+    setUseDarkMode(event.target.checked);
+  };
+
+  useEffect(() => {
+    console.log('component did mount');
+  }, []);
+
+  useEffect(() => {
+    console.log(`theme 변경된 -> ${useDarkMode}`);
+  }, [useDarkMode]);
+
+  console.log('render');
   return (
-    <Container maxWidth="lg" sx={{p:1}}>
-      <Grid container spacing={{xs:2,md:3}} columns={{xs:4,sm:8,md:12}}>
-
-      {userCards}
-
-    </Grid>
-    </Container>
+    <ThemeProvider
+      theme={createTheme({
+        palette: {
+          mode: useDarkMode ? 'dark' : 'light',
+        },
+      })}
+    >
+      <Box
+        sx={{
+          height: '100%',
+          bgcolor: 'background.default',
+          color: 'text.primary',
+          p: 1,
+        }}
+      >
+        <Switch
+          checked={useDarkMode}
+          onChange={handleChange}
+          color="warning"
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <Container maxWidth="lg" sx={{ p: 1 }}>
+          <UserCardList userDatas={userDatas} />
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 }
 
