@@ -1,63 +1,35 @@
-import faker from '@faker-js/faker';
-import faker_ko from '@faker-js/faker/locale/ko';
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
-import './App.css';
+import faker from '@faker-js/faker'; // 영문 버전
+import faker_ko from '@faker-js/faker/locale/ko'; // 한글 버전
+import UserCard from './components/UserCard';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+
+const userDatas= [];
+
+while(userDatas.length < 10) {
+  userDatas.push({
+    avatar: faker.image.avatar(),
+    name: `${faker_ko.name.lastName()}${faker_ko.name.firstName()}`,
+    email: faker.internet.email(),
+    jobTitle: faker.name.jobTitle(),
+    phoneNumber: faker.phone.phoneNumber(),
+  
+  })
+}
 
 function App() {
-  const userDatas = [];
-
-  while(userDatas.length < 5){
-    userDatas.push({
-      avatar: faker.image.avatar(),
-      name: `${faker_ko.name.lastName()}${faker_ko.name.firstName()}`,
-      email: faker.internet.email(),
-      jobTitle: faker.name.jobTitle(),
-      phoneNumber: faker_ko.phone.phoneNumber()
-    })
-  }
-
-  const userCards = userDatas.map((userData,idx) => {
-    return <Card key = {idx} sx={{ maxWidth: 345 }}>
-    <CardActionArea>
-      <CardMedia
-        component="img"
-        height="140"
-        image={userData.avatar}
-        alt="green iguana"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {userData.name}
-        </Typography>
-        <Typography>{userData.jobTitle}</Typography> <br />
-        <Typography variant="body2" color="text.secondary">
-          Email : {userData.email} <br />
-          Phone : {userData.phoneNumber}
-        </Typography>
-      </CardContent>
-    </CardActionArea>
-  </Card>
-    
-    
-    /*
-    <div key={idx}>
-    <h4>{userData.jobTitle}</h4>
-    <img src={userData.avatar} alt="유저 아바타" />
-    <h5>{userDatas.name}</h5>
-    {userData.email} <br/>
-    {userData.phoneNumber}
-  </div> */
+  const userCards = userDatas.map((userData, idx) => {
+    return <UserCard key={idx} userData={userData} idx={idx} />;
   })
-
+  
   return (
-    <div className="App">
+    <Container maxWidth="lg" sx={{p:1}}>
+      <Grid container spacing={{xs:2,md:3}} columns={{xs:4,sm:8,md:12}}>
+
       {userCards}
-    </div>
+
+    </Grid>
+    </Container>
   );
 }
 
